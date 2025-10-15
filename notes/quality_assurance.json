@@ -1,0 +1,1 @@
+{"time": {"simple": {"numeric": "True", "bounds": [1514764800, 2532685778]}, "advanced": {}}, "skintemp": {"simple": {"numeric": "True", "bounds": [-1, 30]}, "advanced": {"moving_average_limit": {"window": 100, "limit": 5}}}, "skytemp": {"simple": {"numeric": "True", "bounds": [-120, 50]}, "advanced": {}}}

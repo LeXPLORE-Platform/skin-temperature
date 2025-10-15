@@ -65,7 +65,6 @@ def merge_files(output_folder, new_files):
             if day_file not in files:
                 files.append(day_file)
         except:
-            raise
             print("Failed to merge: {}".format(file))
     files.sort()
     return files

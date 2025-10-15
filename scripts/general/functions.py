@@ -125,6 +125,11 @@ class GenericInstrument:
 
             valid_time = (time >= datetime.timestamp(file_start)) & (time <= datetime.timestamp(file_end))
 
+            if len(time[valid_time]) == 0:
+                self.log.info("Skipping as time values == 0", indent=3)
+                file_start = file_start + file_period
+                continue
+
             if not os.path.isfile(out_file):
                 self.log.info("Creating new file.", indent=3)
                 with netCDF4.Dataset(out_file, mode='w', format='NETCDF4') as nc:

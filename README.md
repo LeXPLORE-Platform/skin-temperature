@@ -25,36 +25,52 @@ The skin temperature sensor records at 10 minute intervals the skin temperature 
 
 ## Usage
 
-### Process new data
+### Credentials
 
-In order to process new data locally on your machine the file path needs to be adapted to your local file system. The following steps are therefore necessary: 
+In order to download live data `creds_example.json` should be renamed to `creds.json` and completed.
 
-- Edit the `scripts/input_batch.bat` file. Change all the directory paths to match your local file system. This file contains all the file paths necessary to launch the batch scripts `runfile.bat`.
+### Operation
 
-- Edit the `scripts/input_python.py` file. Change all the directory paths to match your local file system. This file contains all the directories where the python script outputs data to.
+To run the pipeline: `python scripts/main.py`
 
-To process new data, place the data in the input directory which you specified in the `scripts/input_batch.bat` file. Double-clicking on the `runfile.bat` file will automatically 
-process all the data in the input directory and store the output in the directories specified in the `scripts/input_python.py` file. 
+The python script `scripts/main.py` defines the different processing steps while the python script 
+`scripts/instruments.py` contains the instrument classes with all the corresponding class methods to process the data. 
+To add a new processing or visualization step, a new class method can be created in the `instruments.py` file and the 
+step can be added in `main.py` file. Both above-mentioned python scripts are independent of the local file system.
 
-### Adapt/Extend data processing pipeline
+### Arguments
 
-The python script `scripts/main.py` defines the different processing steps while the python script `scripts/thetis.py` contains the python class thetis with all the corresponding 
-class methods to process the data. To add a new processing or visualization step, a new class method can be created in the `thetis.py` file and the step can be added in `main_theits.py` file.
-Both above mentioned python scripts are independent of the local file system.
+Run `scripts/main.py -h` for details on the input arguments available
 
 ## Data
 
-The data can be found in the folder `data`. The data is structured as follows:
+### Access
+
+Data for this repository is stored in a remote object store. In order to work with the data you need 
+to run `scripts/download_remote_data.py`, this will syncronise the local `data` folder with the remote 
+data folder on the server. 
+
+### License
+
+[![CC BY 4.0][cc-by-shield]][cc-by] 
+
+This data is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). This license states that consumers ("Data Users" herein) may distribute, adapt, reuse, remix, and build upon this work, as long as they give appropriate credit, provide a link to the license, and indicate if changes were made.
+ 
+The Data User has an ethical obligation to cite the data source (see the DOI number) in any publication or product that results from its use. Communication, collaboration, or co-authorship (as appropriate) with the creators of this data package is encouraged. 
+ 
+Extensive efforts are made to ensure that online data are accurate and up to date, but the authors will not take responsibility for any errors that may exist in data provided online. Furthermore, the Data User assumes all responsibility for errors in analysis or judgment resulting from use of the data. The Data User is urged to contact the authors of the data if any questions about methodology or results occur. 
+
+
 
 ### Data Structure
 
-- **Level 0**: Raw data collected from the different sensors.
+The data can be found in the folder `data`. The data is structured as follows:
 
-- **Level 1**: Raw data stored to NetCDF file where attributes (such as sensors used, units, description of data, etc.) are added to the data, column with quality flags are added to the Level 1A data. Quality flag "1" indicates that the data point didn't pass the 
-quality checks and further investigation is needed, quality flag "0" indicates that no further investiagion is needed.
+- **Level 0**: Raw data collected from the different sensors.
+- **Level 1**: Data is converted to NetCDF and quality assurance is applied. Quality flag "1" indicates that the data point didn't pass the 
+quality checks and further investigation is needed, quality flag "0" indicates that the data has passed the quality assurance check. Do not forget to apply the quality check mask when analysing the data.
 
 ## Quality assurance
 
-Quality checks include but are not limited to range validation, data type checking and flagging missing data. Full details can be seen in the quality_assurance.json file.
-Advanced quality assurance can be run using the `scripts/quality_assurance.py` function. In order to better define the quality assurance users can interact with the data and define
-new quality assurance checks in `notebooks/define_quality assurance.ipynb`.
+Quality checks include but are not limited to range validation, data type checking and flagging missing data.
+The automatic quality check is controlled by the package [Envass](https://pypi.org/project/envass/). The specific methods implemented for this dataset are listed in `notes/quality_assurance.json`. 

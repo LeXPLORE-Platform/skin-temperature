@@ -36,7 +36,7 @@ class SkinTemperature(GenericInstrument):
         try:
             df = pd.read_csv(file, header=None, encoding="ISO-8859-1", skiprows=4)
             df.columns = ["date", "record", "skintemp", "skytemp"]
-            df["time"] = df["date"].apply(lambda x: datetime.timestamp(datetime.strptime(x, '%Y-%m-%d %H:%M:%S')))
+            df["time"] = df["date"].apply(lambda x: datetime.timestamp(datetime.strptime(x, '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone.utc)))
             df.drop_duplicates(subset='date', inplace = True)
             df.sort_values("time", inplace=True)
             df.reset_index(inplace=True, drop=True)
